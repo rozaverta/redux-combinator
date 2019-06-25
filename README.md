@@ -21,24 +21,25 @@ import { createStore } from 'redux';
 import { rootReducer, addReducer } from 'redux-combinator';
 
 // Create a Redux store holding the state of your app.
-let store = createStore(rootReducer);
+// Warning: Set default state!
+let store = createStore(rootReducer, {});
 
 // This reducer creates an array of tasks. The `taskList` context.
 function reducerFirst(state, action) {
 	
 	switch (action.type) {
 		case 'FILL_TASK':
-			return action.payload.splice();
+			return action.payload.slice();
 			
 		case 'ADD_TASK':
-			const copyForAdd = state.splice();
+			const copyForAdd = state.slice();
 			copyForAdd.push(action.payload);
 			return copyForAdd;
 			
 		case 'REMOVE_TASK':
 			const index = state.indexOf(action.payload);
 			if(index > -1) {
-				const copyForRemove = state.splice();
+				const copyForRemove = state.slice();
 				copyForRemove.splice(index, 1);
 				return copyForRemove;
 			}

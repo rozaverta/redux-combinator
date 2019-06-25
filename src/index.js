@@ -78,7 +78,7 @@ export function addReducer(reducer, context = null, actionTypes = null, defaultV
  * @param {Object} action
  * @returns {*}
  */
-export function rootReducer(state, action) {
+export function rootReducer(state = {}, action) {
 	const type = action.type;
 
 	if (comb.hasOwnProperty(type)) {

@@ -123,6 +123,10 @@ function addReducer(reducer, context, actionTypes, defaultValue) {
  */
 
 function rootReducer(state, action) {
+	if (state === void 0) {
+		state = {};
+	}
+
 	var type = action.type;
 
 	if (comb.hasOwnProperty(type)) {
