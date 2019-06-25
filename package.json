@@ -1,0 +1,35 @@
+{
+  "name": "redux-combinator",
+  "version": "1.0.0",
+  "description": "Alternative reducer combinator for the redux library. Grouping action types and context names.",
+  "homepage": "https://github.com/rozaverta/redux-combinator",
+  "author": "GoshaV Maniako (https://github.com/rozaverta)",
+  "repository": "rozaverta/redux-combinator",
+  "license": "MIT",
+  "main": "index.js",
+  "module": "src/index.js",
+  "files": [
+    "index.js",
+    "index.min.js",
+    "index.d.ts",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {},
+  "keywords": [
+    "redux",
+    "reducer"
+  ],
+  "dependencies": {
+    "typeof-utility": "^1.0.1"
+  },
+  "devDependencies": {
+    "redux": "^4.0.1"
+  },
+  "types": "index.d.ts",
+  "typings": "./index.d.ts"
+}
