@@ -1,6 +1,6 @@
 # redux-combinator
 
-> Extended functions for defining and converting data types.
+> Alternative reducer combinator for the redux library. Grouping action types and context names.
 
 ## Install
 
