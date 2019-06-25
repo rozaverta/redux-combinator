@@ -1,6 +1,6 @@
-import {isFunc, isNull, isNumeric, isString, isSymbol} from "typeof-utility";
+import {isEmpty, isFunc, isNull, isNumeric, isString, isSymbol} from "typeof-utility";
 
-function isContextAndType(value)
+function isContextAndActionType(value)
 {
 	return isString(value) || isNumeric(value) || isSymbol(value)
 }
@@ -16,7 +16,6 @@ export default function createReducer(def = {}) {
 	const
 		comb = {},
 		defaultValues = {},
-		getKey = context => isSymbol(context) ? context : `key:${context}`,
 		getDef = (context, def) => {
 			if(defaultValues.hasOwnProperty(context)) {
 				def = defaultValues[context];
@@ -26,22 +25,22 @@ export default function createReducer(def = {}) {
 			}
 			return def
 		},
-		append = (context, type, reducer) => {
+		append = (actionType, context, reducer) => {
 
-			if (!comb[type]) {
-				comb[type] = {
+			if (!comb[actionType]) {
+				comb[actionType] = {
 					keys: []
 				};
 			}
 
-			const key = getKey(context);
+			const key = isSymbol(context) ? context : `key:${context}`;
 
-			if (comb[type][key]) {
-				throw new Error(`Duplicate pairs of the reducer context/type: '${context}/${type}'.`)
+			if (comb[actionType][key]) {
+				throw new Error(`Duplicate pairs of the reducer actionType/context: '${actionType}/${context}'.`)
 			}
 
-			comb[type].keys.push(key);
-			comb[type][key] = {
+			comb[actionType].keys.push(key);
+			comb[actionType][key] = {
 				context,
 				reducer
 			}
@@ -79,26 +78,29 @@ export default function createReducer(def = {}) {
 		return state;
 	};
 
-	reducer.add = (reducer, context = null, actionTypes = null, defaultValue = null) => {
+	reducer.add = (reducer, actionTypes, context, defaultValue) => {
 
-		if (!context) {
+		if (actionTypes == null) {
+			actionTypes = reducer.reducerActionTypes;
+			if(isEmpty(actionTypes)) {
+				throw new Error('Action type(s) is empty.')
+			}
+		}
+
+		if (context == null) {
 			context = reducer.reducerContext || "*"
 		}
 
-		if (!actionTypes) {
-			actionTypes = reducer.reducerActionTypes
-		}
-
-		if (isContextAndType(context) && isFunc(reducer)) {
+		if (isContextAndActionType(context) && isFunc(reducer)) {
 
 			if (!Array.isArray(actionTypes)) {
 				actionTypes = [actionTypes]
 			}
 
-			for (let i = 0, type, length = actionTypes.length; i < length; i++) {
-				type = actionTypes[i];
-				if (isContextAndType(type)) {
-					append(context, type, reducer)
+			for (let i = 0, actionType, length = actionTypes.length; i < length; i++) {
+				actionType = actionTypes[i];
+				if (isContextAndActionType(actionType)) {
+					append(actionType, context, reducer)
 				} else {
 					throw new Error('Expected the action type to be a string, numeric or symbol.')
 				}
@@ -122,6 +124,13 @@ export default function createReducer(def = {}) {
 		if( override || ! defaultValues.hasOwnProperty(context) ) {
 			defaultValues[context] = value
 		}
+	};
+
+	reducer.getDefault = (context) => {
+		if(context == null) {
+			context = "*"
+		}
+		return defaultValues.hasOwnProperty(context) ? defaultValues[context] : (void 0)
 	};
 
 	return reducer;

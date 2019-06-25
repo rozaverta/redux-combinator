@@ -13,8 +13,8 @@ interface Reducer extends Function {
     (state: "*", action: Action): State;
     <S = State>(state: S, action: Action, globalState: State): S;
 
-    readonly reducerContext?: Context;
     readonly reducerActionTypes?: ActionType | ActionType[];
+    readonly reducerContext?: Context;
     readonly reducerDefaultValue?: any;
 }
 
@@ -45,11 +45,11 @@ export function rootReducer(state: State, action: Action): State;
  * Add new reducer.
  *
  * @param {Function} reducer
+ * @param {String|Number|Symbol|*[]} actionTypes
  * @param {String|Number|Symbol} context
- * @param {String|String[]} actionTypes
  * @param {*} defaultValue
  */
-export function addReducer(reducer: Reducer, context?: Context, actionTypes?: ActionType | ActionType[], defaultValue?: any): void;
+export function addReducer(reducer: Reducer, actionTypes?: ActionType | ActionType[], context?: Context, defaultValue?: any): void;
 
 /**
  * Set default context value. Use `*` for global context.
@@ -59,3 +59,10 @@ export function addReducer(reducer: Reducer, context?: Context, actionTypes?: Ac
  * @param {Boolean} override
  */
 export function setDefault(value: any, context?: Context, override?: boolean): void;
+
+/**
+ * Get default context value. Use `*` for global context.
+ *
+ * @param {String|Number|Symbol} context
+ */
+export function getDefault(context?: Context): any;

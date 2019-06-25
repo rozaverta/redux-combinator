@@ -89,13 +89,13 @@ function reducerSecond(state, action, globalState) {
 }
 
 // Set reducer properties
-reducerSecond.reducerContext = "taskStat";
 reducerSecond.reducerActionTypes = ["ADD_TASK", "REMOVE_TASK", "FILL_TASK", "CLEAR_TASK_STAT"];
+reducerSecond.reducerContext = "taskStat";
 reducerSecond.reducerDefaultValue = {fill: 0, add: 0, remove: 0, total: 0};
 
 // Add reducers
 // The wrapper for the `rootReducer.add` method
-addReducer(reducerFirst, "taskList", ["ADD_TASK", "REMOVE_TASK", "FILL_TASK"], []); // alternative syntax
+addReducer(reducerFirst, ["ADD_TASK", "REMOVE_TASK", "FILL_TASK"], "taskList", []); // alternative syntax
 addReducer(reducerSecond);
 
 // Dispatch actions
@@ -109,7 +109,7 @@ console.log(store.getState());
 ## Functions
 
 <details>
-<summary><code>createReducer([def])</code></summary>
+<summary><strong><code>createReducer([def])</code></strong></summary>
 
 <br>
 
@@ -117,7 +117,7 @@ console.log(store.getState());
 
 Use this function when there are several `store` objects in your project (_`createStore (reducer)`_).
 If you used only one root store (as Redux recommends), 
-you should use the `rootReducer`, `addReducer`, and `setDefault` functions.
+you should use the `rootReducer`, `addReducer`, `setDefault`, and `getDefault` functions.
 
 <strong>Arguments</strong>
 
@@ -153,7 +153,7 @@ This function was created by the `createReducer()` function.
 
 
 <details>
-<summary><strong><code>addReducer(reducer, [context], [actionTypes], [defaultValue])</code></strong></summary>
+<summary><strong><code>addReducer(reducer, [actionTypes], [context], [defaultValue])</code></strong></summary>
 
 <br>
 
@@ -164,8 +164,8 @@ This wrapper function is for the `createReducer().add` function.
 <strong>Arguments</strong>
 
 1. `reducer: Function` - Reducer function.
-2. `context: String` - Context key, use `*` for global context (default).
-3. `actionTypes: String|Number|Symbol|mixed[]` - Action type name or action type collection.
+2. `context: String|Number|Symbol` - Context key, use `'*'` for global context (default).
+3. `actionTypes: String|Number|Symbol|*[]` - Action type name or action type collection.
 4. `defaultValue: any` - Any default value for used context. Ignored if added before.
 
 > The reducer function (reducerFunction) may contain (as an alternative) the following properties. 
@@ -192,8 +192,28 @@ This wrapper function is for the `createReducer().setDefault` function.
 <strong>Arguments</strong>
 
 1. `value: any` - The context value.
-2. `context: String` - Context key, use `*` for global context.
+2. `context: String|Number|Symbol` - Context key, use `'*'` for global context.
 3. `override: boolean = true` - Modify if exists. Default is `true`.
+
+</details>
+
+
+<details>
+<summary><strong><code>getDefault([context])</code></strong></summary>
+
+<br>
+
+> Gets the default value for the context state.
+
+This wrapper function is for the `createReducer().getDefault` function.
+
+<strong>Arguments</strong>
+
+1. `context: String|Number|Symbol` - Context key, use `'*'` for global context.
+
+<strong>Returns</strong>
+
+`*` - Mixed value.
 
 </details>
 
