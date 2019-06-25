@@ -1,6 +1,6 @@
 {
   "name": "redux-combinator",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Alternative reducer combinator for the redux library. Grouping action types and context names.",
   "homepage": "https://github.com/rozaverta/redux-combinator",
   "author": "GoshaV Maniako (https://github.com/rozaverta)",
