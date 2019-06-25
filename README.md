@@ -109,7 +109,9 @@ console.log(store.getState());
 ## Functions
 
 <details>
-<summary><h3><code>createReducer([def])</code></h3></summary>
+<summary><code>createReducer([def])</code></summary>
+
+<br>
 
 > Create new reducer combinator.
 
@@ -130,7 +132,9 @@ you should use the `rootReducer`, `addReducer`, and `setDefault` functions.
 
 
 <details>
-<summary><h3><strong><code>rootReducer(state, action)</code></strong></h3></summary>
+<summary><strong><code>rootReducer(state, action)</code></strong></summary>
+
+<br>
 
 > Root reducer.
 
@@ -149,7 +153,9 @@ This function was created by the `createReducer()` function.
 
 
 <details>
-<summary><h3><strong><code>addReducer(reducer, [context], [actionTypes], [defaultValue])</code></strong></h3></summary>
+<summary><strong><code>addReducer(reducer, [context], [actionTypes], [defaultValue])</code></strong></summary>
+
+<br>
 
 > Add new reducer.
 
@@ -175,7 +181,9 @@ See the example above.
 
 
 <details>
-<summary><h3><strong><code>setDefault(value, [context], [override])</code></strong></h3></summary>
+<summary><strong><code>setDefault(value, [context], [override])</code></strong></summary>
+
+<br>
 
 > Sets the default value for the context state.
 
