@@ -1,7 +1,7 @@
 import {isEmpty, isFunc, isNull, isNumeric, isString, isSymbol} from "typeof-utility";
+import initializationReducer, {ACTION_TYPE_INITIALIZATION} from "./initializationReducer";
 
-function isContextAndActionType(value)
-{
+function isContextAndActionType(value) {
 	return isString(value) || isNumeric(value) || isSymbol(value)
 }
 
@@ -12,6 +12,7 @@ function isContextAndActionType(value)
  * @returns {Function}
  */
 export default function createReducer(def = {}) {
+	let store = null;
 
 	const
 		comb = {},
@@ -24,6 +25,24 @@ export default function createReducer(def = {}) {
 				}
 			}
 			return def
+		},
+		setDef = (context, defaultValue) => {
+			defaultValues[context] = defaultValue;
+			if(store) {
+				let state = store.getState();
+				if(context !== "*") {
+					state = state[context];
+				}
+				if(state != null) {
+					store.dispatch({
+						type: ACTION_TYPE_INITIALIZATION,
+						payload: {
+							context,
+							store: defaultValue
+						}
+					});
+				}
+			}
 		},
 		append = (actionType, context, reducer) => {
 
@@ -78,6 +97,18 @@ export default function createReducer(def = {}) {
 		return state;
 	};
 
+	reducer.initialize = (storeObject) => {
+		if(!store) {
+			if(isFunc(storeObject.dispatch) && isFunc(storeObject.getState)) {
+				reducer.add(initializationReducer);
+				store = storeObject;
+			}
+		}
+		else {
+			throw new Error("The store has already been initialized.")
+		}
+	};
+
 	reducer.add = (reducer, actionTypes, context, defaultValue) => {
 
 		if (actionTypes == null) {
@@ -109,9 +140,9 @@ export default function createReducer(def = {}) {
 			// Set default value for context
 			if (! defaultValues.hasOwnProperty(context)) {
 				if (!isNull(defaultValue)) {
-					defaultValues[context] = defaultValue
+					setDef(context, defaultValue);
 				} else if (!isNull(reducer.reducerDefaultValue)) {
-					defaultValues[context] = reducer.reducerDefaultValue
+					setDef(context, reducer.reducerDefaultValue);
 				}
 			}
 
@@ -122,7 +153,7 @@ export default function createReducer(def = {}) {
 
 	reducer.setDefault = (value, context = "*", override = true) => {
 		if( override || ! defaultValues.hasOwnProperty(context) ) {
-			defaultValues[context] = value
+			setDef(context, value);
 		}
 	};
 
