@@ -1,5 +1,5 @@
 import {isEmpty, isFunc, isNull, isNumeric, isString, isSymbol} from "typeof-utility";
-import initializationReducer, {ACTION_TYPE_INITIALIZATION} from "./initializationReducer";
+import initializationReducer, {ACTION_TYPE_INITIALIZATION, ACTION_TYPE_REBOOT} from "./initializationReducer";
 
 function isContextAndActionType(value) {
 	return isString(value) || isNumeric(value) || isSymbol(value)
@@ -63,6 +63,18 @@ export default function createReducer(def = {}) {
 				context,
 				reducer
 			}
+		},
+		reboot = (state = {}) => {
+			Object.keys(defaultValues).forEach(context => {
+				if(state[context] == null) {
+					const def = defaultValues[context];
+					state[context] = isFunc(def) ? def() : def;
+				}
+			});
+			store.dispatch({
+				type: ACTION_TYPE_REBOOT,
+				payload: state,
+			});
 		};
 
 	const reducer = (state, action) => {
@@ -98,15 +110,12 @@ export default function createReducer(def = {}) {
 	};
 
 	reducer.initialize = (storeObject) => {
-		if(!store) {
-			if(isFunc(storeObject.dispatch) && isFunc(storeObject.getState)) {
-				reducer.add(initializationReducer);
-				store = storeObject;
-			}
+		if(store) {
+			throw new Error("The store has already been initialized.");
 		}
-		else {
-			throw new Error("The store has already been initialized.")
-		}
+		reducer.add(initializationReducer);
+		store = storeObject;
+		return reboot;
 	};
 
 	reducer.add = (reducer, actionTypes, context, defaultValue) => {
